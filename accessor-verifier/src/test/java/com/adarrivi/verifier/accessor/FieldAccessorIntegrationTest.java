@@ -8,7 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-public class AccessorTest {
+public class FieldAccessorIntegrationTest {
 
     private static final String[] NON_INSTANTIABLE = { "nonInstantiable", "getNonInstantiable", "setNonInstantiable" };
     private static final String[] NO_CONSTRUCTOR_ACCESS = { "noAccessConstructor", "getNoAccessConstructor", "setNoAccessConstructor" };
@@ -23,7 +23,7 @@ public class AccessorTest {
     private Method getter;
     private Method setter;
     private Field field;
-    private Accessor victim;
+    private FieldAccessor victim;
 
     @Test
     public void findValueInstance_NonInstantiable_ThrowsAssertionErr() {
@@ -36,17 +36,17 @@ public class AccessorTest {
 
     private void givenAccessors(String[] accessorNames) {
         try {
-            field = AccessorStub.class.getDeclaredField(accessorNames[0]);
+            field = FieldAccessorStub.class.getDeclaredField(accessorNames[0]);
             field.setAccessible(true);
-            getter = AccessorStub.class.getDeclaredMethod(accessorNames[1], (Class<?>[]) null);
-            setter = AccessorStub.class.getDeclaredMethod(accessorNames[2], field.getType());
+            getter = FieldAccessorStub.class.getDeclaredMethod(accessorNames[1], (Class<?>[]) null);
+            setter = FieldAccessorStub.class.getDeclaredMethod(accessorNames[2], field.getType());
         } catch (NoSuchFieldException | SecurityException | NoSuchMethodException e) {
             throw new AssertionError(e);
         }
     }
 
     private void givenVictim() {
-        victim = new Accessor(field, getter, setter);
+        victim = new FieldAccessor(field, getter, setter);
     }
 
     private void whenFindValueInstance() {
@@ -77,7 +77,7 @@ public class AccessorTest {
     }
 
     private void whenVerifyAccessors() {
-        victim.verifyAccessors(new AccessorStub());
+        victim.verify(new FieldAccessorStub());
     }
 
     @Test
@@ -101,8 +101,44 @@ public class AccessorTest {
     }
 
     @Test
-    public void verifyAccessors_DirectAccessor() {
+    public void verifyAccessors_DirectAccessors_OK() {
         givenAccessors(DIRECT_ACCESSORS);
+        givenVictim();
+        givenFindValueInstance();
+        whenVerifyAccessors();
+    }
+
+    @Test
+    public void verifyAccessors_NullGetter_NullSetter_OK() {
+        givenAccessors(DIRECT_ACCESSORS);
+        givenNullGetter();
+        givenNullSetter();
+        givenVictim();
+        givenFindValueInstance();
+        whenVerifyAccessors();
+    }
+
+    private void givenNullGetter() {
+        getter = null;
+    }
+
+    private void givenNullSetter() {
+        setter = null;
+    }
+
+    @Test
+    public void verifyAccessors_NullGetter_OK() {
+        givenAccessors(DIRECT_ACCESSORS);
+        givenNullGetter();
+        givenVictim();
+        givenFindValueInstance();
+        whenVerifyAccessors();
+    }
+
+    @Test
+    public void verifyAccessors_NullSetter_OK() {
+        givenAccessors(DIRECT_ACCESSORS);
+        givenNullSetter();
         givenVictim();
         givenFindValueInstance();
         whenVerifyAccessors();

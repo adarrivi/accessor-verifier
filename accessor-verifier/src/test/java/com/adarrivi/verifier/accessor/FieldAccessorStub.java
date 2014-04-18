@@ -2,7 +2,7 @@ package com.adarrivi.verifier.accessor;
 
 import com.adarrivi.verifier.accessor.sample.NoAccessibleConstructorClass;
 
-class AccessorStub {
+class FieldAccessorStub {
 
     private int nonInstantiable;
     private NoAccessibleConstructorClass noAccessConstructor;

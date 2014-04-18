@@ -6,20 +6,20 @@ import java.lang.reflect.Method;
 
 import org.junit.Assert;
 
-public class Accessor {
+public class FieldAccessor {
 
+    private Field field;
     private Method getter;
     private Method setter;
     private Object valueInstance;
-    private Field field;
 
-    Accessor(Field field, Method getter, Method setter) {
+    FieldAccessor(Field field, Method getter, Method setter) {
         this.getter = getter;
         this.setter = setter;
         this.field = field;
     }
 
-    Accessor(Field field, Method getter, Method setter, Object valueInstance) {
+    FieldAccessor(Field field, Method getter, Method setter, Object valueInstance) {
         this.getter = getter;
         this.setter = setter;
         this.field = field;
@@ -28,13 +28,13 @@ public class Accessor {
 
     void findValueInstance() {
         try {
-            valueInstance = getter.getReturnType().newInstance();
+            valueInstance = field.getType().newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             throw new AssertionError(e);
         }
     }
 
-    public void verifyAccessors(Object victim) {
+    void verify(Object victim) {
         try {
             verifyGetter(victim);
             verifySetter(victim);
@@ -44,12 +44,18 @@ public class Accessor {
     }
 
     private void verifyGetter(Object victim) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        if (getter == null) {
+            return;
+        }
         setValueInstanceIntoField(victim);
         Object getterResult = getter.invoke(victim, (Object[]) null);
         Assert.assertEquals(valueInstance, getterResult);
     }
 
     private void verifySetter(Object victim) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+        if (setter == null) {
+            return;
+        }
         setValueInstanceIntoField(victim);
         setter.invoke(victim, valueInstance);
         Object valueFromField = getValueFromField(victim);

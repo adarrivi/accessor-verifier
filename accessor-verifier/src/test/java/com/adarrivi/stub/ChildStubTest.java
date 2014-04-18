@@ -2,17 +2,17 @@ package com.adarrivi.stub;
 
 import org.junit.Test;
 
-import com.adarrivi.verifier.AccessorConfiguration;
-import com.adarrivi.verifier.ClassMethodAccessor;
-import com.adarrivi.verifier.accessor.AccessorFactory;
+import com.adarrivi.verifier.accessor.ClassFieldAccessor;
+import com.adarrivi.verifier.accessor.ClassFieldsConfig;
+import com.adarrivi.verifier.accessor.ClassMemberFinder;
+import com.adarrivi.verifier.accessor.FieldAccessorFactory;
 
 public class ChildStubTest {
 
     @Test
     public void testDirectAccessors() {
-        ClassMethodAccessor accessor = new ClassMethodAccessor(ChildStub.class, new AccessorConfiguration(), new AccessorFactory());
-        accessor.addInstantiatedValue(int.class, 10);
+        ClassFieldAccessor accessor = new ClassFieldAccessor(new ClassMemberFinder(ChildStub.class), new ClassFieldsConfig(),
+                new FieldAccessorFactory());
         accessor.verify(new ChildStub());
     }
-
 }
