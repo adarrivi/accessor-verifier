@@ -1,4 +1,4 @@
-package com.adarrivi.accessor;
+package com.adarrivi.verifier.accessor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

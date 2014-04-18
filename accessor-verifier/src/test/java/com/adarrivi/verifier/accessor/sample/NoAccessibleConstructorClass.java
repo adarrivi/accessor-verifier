@@ -1,4 +1,4 @@
-package com.adarrivi.accessor.sample;
+package com.adarrivi.verifier.accessor.sample;
 
 public class NoAccessibleConstructorClass {
 

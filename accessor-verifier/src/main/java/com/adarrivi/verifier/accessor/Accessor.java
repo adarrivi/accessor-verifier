@@ -1,4 +1,4 @@
-package com.adarrivi.accessor;
+package com.adarrivi.verifier.accessor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 
 import org.junit.Assert;
 
-class Accessor {
+public class Accessor {
 
     private Method getter;
     private Method setter;
@@ -34,7 +34,7 @@ class Accessor {
         }
     }
 
-    void verifyAccessors(Object victim) {
+    public void verifyAccessors(Object victim) {
         try {
             verifyGetter(victim);
             verifySetter(victim);

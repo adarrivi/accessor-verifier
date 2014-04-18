@@ -1,4 +1,4 @@
-package com.adarrivi.accessor;
+package com.adarrivi.verifier;
 
 import java.util.HashMap;
 import java.util.Map;

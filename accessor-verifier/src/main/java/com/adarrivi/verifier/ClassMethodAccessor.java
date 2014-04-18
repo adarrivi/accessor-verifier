@@ -1,4 +1,4 @@
-package com.adarrivi.accessor;
+package com.adarrivi.verifier;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -12,18 +12,23 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.adarrivi.verifier.accessor.Accessor;
+import com.adarrivi.verifier.accessor.AccessorFactory;
+
 public class ClassMethodAccessor {
 
     private AccessorConfiguration primitiveInstanceProvider;
+    private AccessorFactory accessorFactory;
 
     private Class<?> aClass;
     private Collection<Field> allFields = new ArrayList<>();
     private Collection<Accessor> accessors = new ArrayList<>();
     private Map<Object, Object> instantiatedValuesMap = new HashMap<>();
 
-    public ClassMethodAccessor(Class<?> aClass, AccessorConfiguration primitiveInstanceProvider) {
+    public ClassMethodAccessor(Class<?> aClass, AccessorConfiguration primitiveInstanceProvider, AccessorFactory accessorFactory) {
         this.aClass = aClass;
         this.primitiveInstanceProvider = primitiveInstanceProvider;
+        this.accessorFactory = accessorFactory;
     }
 
     public void verify(Object victim) {
@@ -61,13 +66,11 @@ public class ClassMethodAccessor {
             Method getter = findStandardGetterFromField(field);
             Method setter = findStandardSetterFromField(field);
             Object instantiatedValue = instantiatedValuesMap.get(field.getType());
-            // TODO Change with instance provider
             Accessor accessor = null;
             if (instantiatedValue != null) {
-                accessor = new Accessor(field, getter, setter, instantiatedValue);
+                accessor = accessorFactory.getNewAccessorWithValueInstance(field, getter, setter, instantiatedValue);
             } else {
-                accessor = new Accessor(field, getter, setter);
-                accessor.findValueInstance();
+                accessor = accessorFactory.getNewAccessor(field, getter, setter);
             }
             accessors.add(accessor);
         }

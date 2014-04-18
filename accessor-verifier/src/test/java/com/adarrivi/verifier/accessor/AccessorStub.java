@@ -1,6 +1,6 @@
-package com.adarrivi.accessor;
+package com.adarrivi.verifier.accessor;
 
-import com.adarrivi.accessor.sample.NoAccessibleConstructorClass;
+import com.adarrivi.verifier.accessor.sample.NoAccessibleConstructorClass;
 
 class AccessorStub {
 
