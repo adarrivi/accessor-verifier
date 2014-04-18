@@ -1,4 +1,4 @@
-package com.adarrivi;
+package com.adarrivi.accessor;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -14,24 +14,28 @@ import java.util.Map;
 
 public class ClassMethodAccessor {
 
+    private AccessorConfiguration primitiveInstanceProvider;
+
     private Class<?> aClass;
     private Collection<Field> allFields = new ArrayList<>();
     private Collection<Accessor> accessors = new ArrayList<>();
     private Map<Object, Object> instantiatedValuesMap = new HashMap<>();
 
-    public ClassMethodAccessor(Class<?> aClass) {
+    public ClassMethodAccessor(Class<?> aClass, AccessorConfiguration primitiveInstanceProvider) {
         this.aClass = aClass;
+        this.primitiveInstanceProvider = primitiveInstanceProvider;
     }
 
     public void verify(Object victim) {
+        instantiatedValuesMap.putAll(primitiveInstanceProvider.getPrimitiveInstancesMap());
         findImplementedAccessors();
         for (Accessor accessor : accessors) {
             accessor.verifyAccessors(victim);
         }
     }
 
-    public <T> void addInstantiatedValue(Class<T> aClass, T aValue) {
-        instantiatedValuesMap.put(aClass, aValue);
+    public <T> void addInstantiatedValue(Class<T> givenClass, T aValue) {
+        instantiatedValuesMap.put(givenClass, aValue);
     }
 
     private void findImplementedAccessors() {
@@ -56,11 +60,13 @@ public class ClassMethodAccessor {
         for (Field field : allFields) {
             Method getter = findStandardGetterFromField(field);
             Method setter = findStandardSetterFromField(field);
-            Accessor accessor = new Accessor(field, getter, setter);
             Object instantiatedValue = instantiatedValuesMap.get(field.getType());
+            // TODO Change with instance provider
+            Accessor accessor = null;
             if (instantiatedValue != null) {
-                accessor.setValueInstance(instantiatedValue);
+                accessor = new Accessor(field, getter, setter, instantiatedValue);
             } else {
+                accessor = new Accessor(field, getter, setter);
                 accessor.findValueInstance();
             }
             accessors.add(accessor);

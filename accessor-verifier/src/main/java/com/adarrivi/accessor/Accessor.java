@@ -1,4 +1,4 @@
-package com.adarrivi;
+package com.adarrivi.accessor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -6,32 +6,35 @@ import java.lang.reflect.Method;
 
 import org.junit.Assert;
 
-public class Accessor {
+class Accessor {
+
     private Method getter;
     private Method setter;
     private Object valueInstance;
     private Field field;
 
-    public Accessor(Field field, Method getter, Method setter) {
+    Accessor(Field field, Method getter, Method setter) {
         this.getter = getter;
         this.setter = setter;
         this.field = field;
     }
 
-    public void setValueInstance(Object value) {
-        valueInstance = value;
+    Accessor(Field field, Method getter, Method setter, Object valueInstance) {
+        this.getter = getter;
+        this.setter = setter;
+        this.field = field;
+        this.valueInstance = valueInstance;
     }
 
-    public void findValueInstance() {
+    void findValueInstance() {
         try {
             valueInstance = getter.getReturnType().newInstance();
-
         } catch (InstantiationException | IllegalAccessException e) {
             throw new AssertionError(e);
         }
     }
 
-    public void verifyAccessors(Object victim) {
+    void verifyAccessors(Object victim) {
         try {
             verifyGetter(victim);
             verifySetter(victim);
@@ -40,13 +43,13 @@ public class Accessor {
         }
     }
 
-    public void verifyGetter(Object victim) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    private void verifyGetter(Object victim) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         setValueInstanceIntoField(victim);
         Object getterResult = getter.invoke(victim, (Object[]) null);
         Assert.assertEquals(valueInstance, getterResult);
     }
 
-    public void verifySetter(Object victim) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    private void verifySetter(Object victim) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         setValueInstanceIntoField(victim);
         setter.invoke(victim, valueInstance);
         Object valueFromField = getValueFromField(victim);
