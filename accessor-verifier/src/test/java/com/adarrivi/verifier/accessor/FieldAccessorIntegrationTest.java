@@ -93,7 +93,7 @@ public class FieldAccessorIntegrationTest {
     @Test
     public void verifyAccessors_NoDirectAccessors_ThrowsAssertionErr() {
         thrown.expect(AssertionError.class);
-        thrown.expectMessage("expected:");
+        thrown.expectMessage("Expected:");
         givenAccessors(NO_DIRECT_ACCESSORS);
         givenVictim();
         givenFindValueInstance();

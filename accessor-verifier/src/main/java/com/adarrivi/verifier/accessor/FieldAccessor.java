@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.junit.Assert;
-
 public class FieldAccessor {
 
     private Field field;
@@ -49,7 +47,7 @@ public class FieldAccessor {
         }
         setValueInstanceIntoField(victim);
         Object getterResult = getter.invoke(victim, (Object[]) null);
-        Assert.assertEquals(valueInstance, getterResult);
+        assertValueInstanceEqualsTo(getterResult);
     }
 
     private void verifySetter(Object victim) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
@@ -58,8 +56,13 @@ public class FieldAccessor {
         }
         setValueInstanceIntoField(victim);
         setter.invoke(victim, valueInstance);
-        Object valueFromField = getValueFromField(victim);
-        Assert.assertEquals(valueInstance, valueFromField);
+        assertValueInstanceEqualsTo(getValueFromField(victim));
+    }
+
+    private void assertValueInstanceEqualsTo(Object given) {
+        if (!valueInstance.equals(given)) {
+            throw new AssertionError("Expected: " + valueInstance + ", got: " + given);
+        }
     }
 
     private void setValueInstanceIntoField(Object victim) throws IllegalArgumentException, IllegalAccessException {

@@ -67,7 +67,8 @@ public class ClassFieldAccessorTest {
     }
 
     private void givenField() {
-        // Getting any field from the current class is enough
+        // Getting any field from the current class is enough.
+        // Cannot mock field because is final
         field = getClass().getDeclaredFields()[0];
         doReturn(Collections.singleton(field)).when(classMemberFinder).getFields();
     }
