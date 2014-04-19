@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-public class ClassFieldAccessor {
+class ClassFieldAccessor {
 
     private ClassFieldsConfig classFieldsConfig;
     private FieldAccessorFactory fieldAccessorFactory;
@@ -14,14 +14,13 @@ public class ClassFieldAccessor {
 
     private Collection<FieldAccessor> fieldAccessors = new ArrayList<>();
 
-    public ClassFieldAccessor(ClassMemberFinder classMemberFinder, ClassFieldsConfig classFieldsConfig,
-            FieldAccessorFactory fieldAccessorFactory) {
+    ClassFieldAccessor(ClassMemberFinder classMemberFinder, ClassFieldsConfig classFieldsConfig, FieldAccessorFactory fieldAccessorFactory) {
         this.classMemberFinder = classMemberFinder;
         this.classFieldsConfig = classFieldsConfig;
         this.fieldAccessorFactory = fieldAccessorFactory;
     }
 
-    public void verify(Object victim) {
+    void verify(Object victim) {
         classMemberFinder.findFields();
         createAccessors();
         verifyAllAccessors(victim);

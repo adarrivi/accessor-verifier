@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class ClassMemberFinder {
+class ClassMemberFinder {
     private Class<?> givenClass;
     private Collection<Field> allFields = new ArrayList<>();
 
-    public ClassMemberFinder(Class<?> givenClass) {
+    ClassMemberFinder(Class<?> givenClass) {
         this.givenClass = givenClass;
     }
 

@@ -3,11 +3,11 @@ package com.adarrivi.verifier.accessor;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ClassFieldsConfig {
+class ClassFieldsConfig {
 
     private Map<Class<?>, Object> noDefaultContructorInstanceMap = new HashMap<>();
 
-    public ClassFieldsConfig() {
+    ClassFieldsConfig() {
         // TODO Create a factory to move this logic from here?
         setPrimitiveInstances();
     }
@@ -24,7 +24,7 @@ public class ClassFieldsConfig {
         return noDefaultContructorInstanceMap;
     }
 
-    public ClassFieldsConfig addNoDefaultConstructorInstance(Object givenInstance) {
+    ClassFieldsConfig addNoDefaultConstructorInstance(Object givenInstance) {
         noDefaultContructorInstanceMap.put(givenInstance.getClass(), givenInstance);
         return this;
     }
