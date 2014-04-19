@@ -1,7 +1,6 @@
 package com.adarrivi.verifier.accessor;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 class FieldAccessor {
@@ -36,12 +35,12 @@ class FieldAccessor {
         try {
             verifyGetter(victim);
             verifySetter(victim);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+        } catch (ReflectiveOperationException e) {
             throw new AssertionError(e);
         }
     }
 
-    private void verifyGetter(Object victim) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    private void verifyGetter(Object victim) throws ReflectiveOperationException {
         if (getter == null) {
             return;
         }
@@ -50,7 +49,7 @@ class FieldAccessor {
         assertValueInstanceEqualsTo(getterResult);
     }
 
-    private void verifySetter(Object victim) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    private void verifySetter(Object victim) throws ReflectiveOperationException {
         if (setter == null) {
             return;
         }
@@ -65,11 +64,11 @@ class FieldAccessor {
         }
     }
 
-    private void setValueInstanceIntoField(Object victim) throws IllegalArgumentException, IllegalAccessException {
+    private void setValueInstanceIntoField(Object victim) throws ReflectiveOperationException {
         field.set(victim, valueInstance);
     }
 
-    private Object getValueFromField(Object victim) throws IllegalArgumentException, IllegalAccessException {
+    private Object getValueFromField(Object victim) throws ReflectiveOperationException {
         return field.get(victim);
     }
 

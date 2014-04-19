@@ -54,6 +54,7 @@
 
 	<build>
 		<plugins>
+			<!-- To set the jdk version -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -63,7 +64,13 @@
 					<target>${java.version}</target>
 				</configuration>
 			</plugin>
-
+			<!-- To process the project with SonarQube -->
+			<!-- Sonar -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>2.1</version>
+			</plugin>
 		</plugins>
 	</build>
 

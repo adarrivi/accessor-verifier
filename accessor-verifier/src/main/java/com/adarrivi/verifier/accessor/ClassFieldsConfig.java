@@ -14,7 +14,7 @@ class ClassFieldsConfig {
 
     private void setPrimitiveInstances() {
         noDefaultContructorInstanceMap.put(int.class, 232456643);
-        noDefaultContructorInstanceMap.put(long.class, 566545l);
+        noDefaultContructorInstanceMap.put(long.class, 566545L);
         noDefaultContructorInstanceMap.put(double.class, 666577645d);
         noDefaultContructorInstanceMap.put(boolean.class, true);
         // TODO Add remaining primitives
