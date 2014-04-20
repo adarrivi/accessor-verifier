@@ -1,33 +1,36 @@
 package com.adarrivi.verifier.accessor;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Map.Entry;
 
 class FieldAccessor {
 
     private Field field;
     private Method getter;
     private Method setter;
+    private Class<?> fieldClass;
     private Object valueInstance;
 
-    FieldAccessor(Field field, Method getter, Method setter) {
-        this.getter = getter;
-        this.setter = setter;
-        this.field = field;
+    FieldAccessor(Entry<Field, PropertyDescriptor> memberEntry) {
+        this.field = memberEntry.getKey();
+        PropertyDescriptor propertyDescriptor = memberEntry.getValue();
+        this.getter = propertyDescriptor.getReadMethod();
+        this.setter = propertyDescriptor.getWriteMethod();
+        this.fieldClass = propertyDescriptor.getPropertyType();
     }
 
-    FieldAccessor(Field field, Method getter, Method setter, Object valueInstance) {
-        this.getter = getter;
-        this.setter = setter;
-        this.field = field;
+    FieldAccessor(Entry<Field, PropertyDescriptor> memberEntry, Object valueInstance) {
+        this(memberEntry);
         this.valueInstance = valueInstance;
     }
 
     void findValueInstance() {
         try {
-            valueInstance = field.getType().newInstance();
+            valueInstance = fieldClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            throw new AssertionError("Cannot instantiate the field type: " + field.getType().getName()
+            throw new AssertionError("Cannot instantiate the field type: " + fieldClass.getName()
                     + "; provide manually an instance for the given class using givenFieldInstances", e);
         }
     }

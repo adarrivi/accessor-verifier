@@ -1,8 +1,9 @@
 package com.adarrivi.verifier.accessor;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Collection;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,14 +17,14 @@ public class ClassMemberFinderIntegrationTest {
 
     private Class<?> inputClass;
     private Field inputField;
-    private Collection<Field> outputFields;
+    private Map<Field, PropertyDescriptor> outputFields;
     private Method outputMethod;
 
     @Test
     public void getFields_NoFields_ReturnsEmptyCollection() {
         givenClass(NoFieldsClass.class);
         givenVictim();
-        whenGetFields();
+        whenGetClassMemberMap();
         thenFieldsShouldBeEmpty();
     }
 
@@ -33,11 +34,11 @@ public class ClassMemberFinderIntegrationTest {
 
     private void givenVictim() {
         victim = new ClassMemberFinder(inputClass);
-        victim.findFields();
+        victim.findMembers();
     }
 
-    private void whenGetFields() {
-        outputFields = victim.getFields();
+    private void whenGetClassMemberMap() {
+        outputFields = victim.getClassMemberMap();
     }
 
     private void thenFieldsShouldBeEmpty() {
@@ -45,11 +46,11 @@ public class ClassMemberFinderIntegrationTest {
     }
 
     @Test
-    public void getFields_ReturnsFields() {
+    public void getClassMemberMap_ReturnsOnlyVaildFields() {
         givenClass(AssortedFieldClass.class);
         givenVictim();
-        whenGetFields();
-        thenNumberOfFieldsShouldBe(3);
+        whenGetClassMemberMap();
+        thenNumberOfFieldsShouldBe(1);
     }
 
     private void thenNumberOfFieldsShouldBe(int expectedNumber) {

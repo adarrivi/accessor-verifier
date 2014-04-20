@@ -1,13 +1,20 @@
 package com.adarrivi.verifier.accessor;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.AbstractMap.SimpleEntry;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class FieldAccessorIntegrationTest {
 
     private static final String[] NON_INSTANTIABLE = { "nonInstantiable", "getNonInstantiable", "setNonInstantiable" };
@@ -19,9 +26,8 @@ public class FieldAccessorIntegrationTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none().handleAssertionErrors();
-
-    private Method getter;
-    private Method setter;
+    @Mock
+    private PropertyDescriptor propertyDescriptor;
     private Field field;
     private FieldAccessor victim;
 
@@ -34,19 +40,23 @@ public class FieldAccessorIntegrationTest {
         whenFindValueInstance();
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void givenAccessors(String[] accessorNames) {
         try {
             field = FieldAccessorStub.class.getDeclaredField(accessorNames[0]);
             field.setAccessible(true);
-            getter = FieldAccessorStub.class.getDeclaredMethod(accessorNames[1], (Class<?>[]) null);
-            setter = FieldAccessorStub.class.getDeclaredMethod(accessorNames[2], field.getType());
+            Method getter = FieldAccessorStub.class.getDeclaredMethod(accessorNames[1], (Class<?>[]) null);
+            Method setter = FieldAccessorStub.class.getDeclaredMethod(accessorNames[2], field.getType());
+            Mockito.when(propertyDescriptor.getReadMethod()).thenReturn(getter);
+            Mockito.when(propertyDescriptor.getWriteMethod()).thenReturn(setter);
+            Mockito.when(propertyDescriptor.getPropertyType()).thenReturn((Class) field.getType());
         } catch (NoSuchFieldException | SecurityException | NoSuchMethodException e) {
             throw new AssertionError(e);
         }
     }
 
     private void givenVictim() {
-        victim = new FieldAccessor(field, getter, setter);
+        victim = new FieldAccessor(new SimpleEntry<>(field, propertyDescriptor));
     }
 
     private void whenFindValueInstance() {
@@ -119,11 +129,11 @@ public class FieldAccessorIntegrationTest {
     }
 
     private void givenNullGetter() {
-        getter = null;
+        Mockito.when(propertyDescriptor.getReadMethod()).thenReturn(null);
     }
 
     private void givenNullSetter() {
-        setter = null;
+        Mockito.when(propertyDescriptor.getWriteMethod()).thenReturn(null);
     }
 
     @Test

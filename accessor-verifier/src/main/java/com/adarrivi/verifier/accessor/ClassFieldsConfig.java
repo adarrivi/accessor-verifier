@@ -16,14 +16,20 @@ class ClassFieldsConfig {
         fieldInstancesMap.put(byte.class, 3);
         fieldInstancesMap.put(short.class, 17);
         fieldInstancesMap.put(int.class, 232456643);
+        fieldInstancesMap.put(Integer.class, Integer.valueOf(232456643));
         fieldInstancesMap.put(long.class, 566545L);
+        fieldInstancesMap.put(Long.class, Long.valueOf(566545L));
         fieldInstancesMap.put(float.class, 4.56444f);
+        fieldInstancesMap.put(Float.class, Float.valueOf(4.56444f));
         fieldInstancesMap.put(double.class, 666577645d);
+        fieldInstancesMap.put(Double.class, Double.valueOf(666577645d));
         fieldInstancesMap.put(boolean.class, true);
+        fieldInstancesMap.put(Boolean.class, Boolean.TRUE);
         fieldInstancesMap.put(char.class, 'b');
+        fieldInstancesMap.put(Character.class, Character.valueOf('b'));
     }
 
-    Map<Class<?>, Object> fidlInstancesMap() {
+    Map<Class<?>, Object> getFieldInstancesMap() {
         return fieldInstancesMap;
     }
 

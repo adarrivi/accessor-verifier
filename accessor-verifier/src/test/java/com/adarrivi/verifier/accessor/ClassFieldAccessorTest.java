@@ -6,17 +6,21 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import com.adarrivi.verifier.TestUtil;
+import com.adarrivi.verifier.sampleclass.ChildStub;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ClassFieldAccessorTest {
@@ -31,6 +35,7 @@ public class ClassFieldAccessorTest {
     private ClassFieldAccessor victim;
 
     private Field field;
+    private PropertyDescriptor propertyDescriptor;
     @Mock
     private FieldAccessor fieldAccessor;
     @Mock
@@ -46,7 +51,7 @@ public class ClassFieldAccessorTest {
     }
 
     private void givenNoFields() {
-        doReturn(Collections.emptyList()).when(classMemberFinder).getFields();
+        doReturn(Collections.emptyMap()).when(classMemberFinder).getClassMemberMap();
     }
 
     private void whenVerify() {
@@ -54,7 +59,7 @@ public class ClassFieldAccessorTest {
     }
 
     private void thenFindFieldsShouldBeInvoked() {
-        verify(classMemberFinder).findFields();
+        verify(classMemberFinder).findMembers();
     }
 
     @Test
@@ -67,18 +72,29 @@ public class ClassFieldAccessorTest {
     }
 
     private void givenField() {
-        // Getting any field from the current class is enough.
-        // Cannot mock field because is final
-        field = getClass().getDeclaredFields()[0];
-        doReturn(Collections.singleton(field)).when(classMemberFinder).getFields();
+        setFieldFromTestClass();
+        setPropertyDescriptorFromField();
+        doReturn(Collections.singletonMap(field, propertyDescriptor)).when(classMemberFinder).getClassMemberMap();
+    }
+
+    private void setFieldFromTestClass() {
+        // Because with mockito we cannot mock final, we need to get real
+        // fields/propertyDescriptors
+        field = ChildStub.class.getDeclaredFields()[0];
+        field.setAccessible(true);
+    }
+
+    private void setPropertyDescriptorFromField() {
+        propertyDescriptor = TestUtil.getPropertyDescriptor(field.getName());
     }
 
     private void givenNoDefaultInstanceConfig(Map<Class<?>, Object> noDefaultMap) {
-        when(classFieldsConfig.fidlInstancesMap()).thenReturn(noDefaultMap);
+        when(classFieldsConfig.getFieldInstancesMap()).thenReturn(noDefaultMap);
     }
 
+    @SuppressWarnings("unchecked")
     private void givenFieldAccessor() {
-        when(fieldAccessorFactory.getNewAccessor(eq(field), any(Method.class), any(Method.class))).thenReturn(fieldAccessor);
+        when(fieldAccessorFactory.getNewAccessor(any(Entry.class))).thenReturn(fieldAccessor);
     }
 
     private void thenFieldAccessorSouldBeVerified() {
@@ -96,9 +112,8 @@ public class ClassFieldAccessorTest {
         thenFieldAccessorSouldBeVerified();
     }
 
+    @SuppressWarnings("unchecked")
     private void givenFieldAccessorForNoDefaultInstantiatedValue() {
-        when(
-                fieldAccessorFactory.getNewAccessorWithValueInstance(eq(field), any(Method.class), any(Method.class),
-                        eq(instantiatedFieldValue))).thenReturn(fieldAccessor);
+        when(fieldAccessorFactory.getNewAccessorWithValueInstance(any(Entry.class), eq(instantiatedFieldValue))).thenReturn(fieldAccessor);
     }
 }

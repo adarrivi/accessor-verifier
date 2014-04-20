@@ -1,10 +1,11 @@
 package com.adarrivi.verifier.accessor;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Map.Entry;
 
 class ClassFieldAccessor {
 
@@ -21,22 +22,20 @@ class ClassFieldAccessor {
     }
 
     void verify(Object victim) {
-        classMemberFinder.findFields();
+        classMemberFinder.findMembers();
         createAccessors();
         verifyAllAccessors(victim);
     }
 
     private void createAccessors() {
-        Map<Class<?>, Object> noDefaultContructorInstanceMap = classFieldsConfig.fidlInstancesMap();
-        for (Field field : classMemberFinder.getFields()) {
-            Method getter = classMemberFinder.findStandardGetterFromField(field);
-            Method setter = classMemberFinder.findStandardSetterFromField(field);
-            Object instantiatedValue = noDefaultContructorInstanceMap.get(field.getType());
+        Map<Class<?>, Object> noDefaultContructorInstanceMap = classFieldsConfig.getFieldInstancesMap();
+        for (Entry<Field, PropertyDescriptor> memberEntry : classMemberFinder.getClassMemberMap().entrySet()) {
+            Object instantiatedValue = noDefaultContructorInstanceMap.get(memberEntry.getValue().getPropertyType());
             FieldAccessor fieldAccessor = null;
             if (instantiatedValue != null) {
-                fieldAccessor = fieldAccessorFactory.getNewAccessorWithValueInstance(field, getter, setter, instantiatedValue);
+                fieldAccessor = fieldAccessorFactory.getNewAccessorWithValueInstance(memberEntry, instantiatedValue);
             } else {
-                fieldAccessor = fieldAccessorFactory.getNewAccessor(field, getter, setter);
+                fieldAccessor = fieldAccessorFactory.getNewAccessor(memberEntry);
             }
             fieldAccessors.add(fieldAccessor);
         }
