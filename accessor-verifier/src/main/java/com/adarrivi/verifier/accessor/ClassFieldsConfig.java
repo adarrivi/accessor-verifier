@@ -1,7 +1,12 @@
 package com.adarrivi.verifier.accessor;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 class ClassFieldsConfig {
 
@@ -10,6 +15,8 @@ class ClassFieldsConfig {
     ClassFieldsConfig() {
         // TODO Create a factory to move this logic from here?
         setPrimitiveInstances();
+        setCollectionInstances();
+        setMapInstances();
     }
 
     private void setPrimitiveInstances() {
@@ -27,6 +34,16 @@ class ClassFieldsConfig {
         fieldInstancesMap.put(Boolean.class, Boolean.TRUE);
         fieldInstancesMap.put(char.class, 'b');
         fieldInstancesMap.put(Character.class, Character.valueOf('b'));
+    }
+
+    private void setCollectionInstances() {
+        fieldInstancesMap.put(List.class, new ArrayList<>());
+        fieldInstancesMap.put(Set.class, new HashSet<>());
+        fieldInstancesMap.put(Collection.class, new HashSet<>());
+    }
+
+    private void setMapInstances() {
+        fieldInstancesMap.put(Map.class, new HashMap<>());
     }
 
     Map<Class<?>, Object> getFieldInstancesMap() {
