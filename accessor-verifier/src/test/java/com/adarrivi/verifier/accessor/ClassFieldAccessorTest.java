@@ -74,7 +74,7 @@ public class ClassFieldAccessorTest {
     }
 
     private void givenNoDefaultInstanceConfig(Map<Class<?>, Object> noDefaultMap) {
-        when(classFieldsConfig.getNoDefaultContructorInstanceMap()).thenReturn(noDefaultMap);
+        when(classFieldsConfig.fidlInstancesMap()).thenReturn(noDefaultMap);
     }
 
     private void givenFieldAccessor() {

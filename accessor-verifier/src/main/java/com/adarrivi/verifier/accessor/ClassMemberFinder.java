@@ -18,6 +18,10 @@ class ClassMemberFinder {
         this.givenClass = givenClass;
     }
 
+    Class<?> getGivenClass() {
+        return givenClass;
+    }
+
     void findFields() {
         findAllFieldsIncludingInherited();
         setAllFieldsAccessible();

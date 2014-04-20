@@ -28,7 +28,7 @@ public class FieldAccessorIntegrationTest {
     @Test
     public void findValueInstance_NonInstantiable_ThrowsAssertionErr() {
         thrown.expect(AssertionError.class);
-        thrown.expectMessage(InstantiationException.class.getName());
+        thrown.expectMessage("givenFieldInstances");
         givenAccessors(NON_INSTANTIABLE);
         givenVictim();
         whenFindValueInstance();
@@ -56,7 +56,7 @@ public class FieldAccessorIntegrationTest {
     @Test
     public void findValueInstance_NotAccessible_ThrowsAssertionErr() {
         thrown.expect(AssertionError.class);
-        thrown.expectMessage(IllegalAccessException.class.getName());
+        thrown.expectMessage("givenFieldInstances");
         givenAccessors(NO_CONSTRUCTOR_ACCESS);
         givenVictim();
         whenFindValueInstance();

@@ -1,4 +1,4 @@
-package com.adarrivi.stub;
+package com.adarrivi.verifier.sampleclass;
 
 public class ChildStub extends ParentStub {
 

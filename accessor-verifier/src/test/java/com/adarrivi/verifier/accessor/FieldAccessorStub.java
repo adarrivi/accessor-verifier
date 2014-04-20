@@ -1,6 +1,6 @@
 package com.adarrivi.verifier.accessor;
 
-import com.adarrivi.verifier.accessor.sample.NoAccessibleConstructorClass;
+import com.adarrivi.verifier.sampleclass.NoAccessibleConstructorClass;
 
 class FieldAccessorStub {
 

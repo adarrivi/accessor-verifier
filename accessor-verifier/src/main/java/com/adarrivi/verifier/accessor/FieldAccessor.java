@@ -27,7 +27,8 @@ class FieldAccessor {
         try {
             valueInstance = field.getType().newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            throw new AssertionError(e);
+            throw new AssertionError("Cannot instantiate the field type: " + field.getType().getName()
+                    + "; provide manually an instance for the given class using givenFieldInstances", e);
         }
     }
 
@@ -46,7 +47,7 @@ class FieldAccessor {
         }
         setValueInstanceIntoField(victim);
         Object getterResult = getter.invoke(victim, (Object[]) null);
-        assertValueInstanceEqualsTo(getterResult);
+        assertValueInstanceEqualsTo(getterResult, "getter");
     }
 
     private void verifySetter(Object victim) throws ReflectiveOperationException {
@@ -55,12 +56,12 @@ class FieldAccessor {
         }
         setValueInstanceIntoField(victim);
         setter.invoke(victim, valueInstance);
-        assertValueInstanceEqualsTo(getValueFromField(victim));
+        assertValueInstanceEqualsTo(getValueFromField(victim), "setter");
     }
 
-    private void assertValueInstanceEqualsTo(Object given) {
+    private void assertValueInstanceEqualsTo(Object given, String operation) {
         if (!valueInstance.equals(given)) {
-            throw new AssertionError("Expected: " + valueInstance + ", got: " + given);
+            throw new AssertionError("Verifying the " + operation + ", Expected: " + valueInstance + ", got: " + given);
         }
     }
 

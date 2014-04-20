@@ -7,8 +7,8 @@ import java.util.Collection;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.adarrivi.verifier.accessor.sample.AssortedFieldClass;
-import com.adarrivi.verifier.accessor.sample.NoFieldsClass;
+import com.adarrivi.verifier.sampleclass.AssortedFieldClass;
+import com.adarrivi.verifier.sampleclass.NoFieldsClass;
 
 public class ClassMemberFinderIntegrationTest {
 

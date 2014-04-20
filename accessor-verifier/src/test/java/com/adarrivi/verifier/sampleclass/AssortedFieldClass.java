@@ -1,4 +1,4 @@
-package com.adarrivi.verifier.accessor.sample;
+package com.adarrivi.verifier.sampleclass;
 
 public class AssortedFieldClass {
 

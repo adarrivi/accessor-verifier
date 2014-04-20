@@ -27,7 +27,7 @@ class ClassFieldAccessor {
     }
 
     private void createAccessors() {
-        Map<Class<?>, Object> noDefaultContructorInstanceMap = classFieldsConfig.getNoDefaultContructorInstanceMap();
+        Map<Class<?>, Object> noDefaultContructorInstanceMap = classFieldsConfig.fidlInstancesMap();
         for (Field field : classMemberFinder.getFields()) {
             Method getter = classMemberFinder.findStandardGetterFromField(field);
             Method setter = classMemberFinder.findStandardSetterFromField(field);
