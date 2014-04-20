@@ -9,7 +9,7 @@ public class SimpleClass {
     }
 
     public void setName(String name) { // <-- Verified OK
-        this.name = name + "helloWorld";
+        this.name = name;
     }
 
     public void increaseValue(int increment) { // <-- Ignored, not standard
