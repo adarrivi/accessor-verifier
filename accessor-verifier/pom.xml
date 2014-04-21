@@ -3,8 +3,26 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.adarrivi</groupId>
 	<artifactId>accessor-verifier</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<packaging>jar</packaging>
+
+	<name>Accessor Verifier</name>
+	<url>https://github.com/adarrivi/accessor-verifier</url>
+	<description>Small utility library to automatically Unit Test Getter and Setter's behavior in Java POJOs.</description>
+
+
+	<scm>
+		<url>https://github.com/adarrivi/accessor-verifier</url>
+		<developerConnection>Alvaro de Miguel Arrivi</developerConnection>
+	</scm>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
 	<properties>
 
@@ -13,9 +31,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<!-- Logging -->
-		<org.slf4j.version>1.7.6</org.slf4j.version>
-
 		<!-- Test -->
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
@@ -23,19 +38,6 @@
 	</properties>
 
 	<dependencies>
-		<!-- Logging with SLF4J & Log4j -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${org.slf4j.version}</version>
-		</dependency>
-		<!-- sfl4 to log4j adaptor -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>${org.slf4j.version}</version>
-		</dependency>
-
 		<!-- Testing dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -73,5 +75,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
