@@ -20,8 +20,10 @@ class ClassFieldsConfig {
     }
 
     private void setPrimitiveInstances() {
-        fieldInstancesMap.put(byte.class, 3);
-        fieldInstancesMap.put(short.class, 17);
+        fieldInstancesMap.put(byte.class, Byte.valueOf("1").byteValue());
+        fieldInstancesMap.put(Byte.class, Byte.valueOf("1"));
+        fieldInstancesMap.put(short.class, Short.valueOf("15").shortValue());
+        fieldInstancesMap.put(Short.class, Short.valueOf("15"));
         fieldInstancesMap.put(int.class, 232456643);
         fieldInstancesMap.put(Integer.class, Integer.valueOf(232456643));
         fieldInstancesMap.put(long.class, 566545L);
